@@ -80,19 +80,23 @@ class Halaman extends BaseController
         // mengambil gambar
         $filefoto = $this->request->getFile('foto_mahasiswa');
         $filektp = $this->request->getFile('foto_ktp');
+        $fotoLama = $this->request->getVar('foto_mahasiswa_lama');
+        $ktpLama = $this->request->getVar('foto_ktp_lama');
         // kondisi
         if ($filefoto->getError() == 4) {
-            $namaFoto = 'default.jpg';
+            $namaFoto = $fotoLama;
         } else {
             $namaFoto = $filefoto->getName();
             $filefoto->move('img/foto');
+            unlink('img/foto/' . $fotoLama);
         }
 
         if ($filektp->getError() == 4) {
-            $namaKtp = 'default.jpg';
+            $namaKtp = $ktpLama;
         } else {
             $namaKtp = $filektp->getName();
             $filektp->move('img/ktp');
+            unlink('img/ktp/' . $ktpLama);
         }
 
         $this->MahasiswaModel->save([
